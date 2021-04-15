@@ -2,34 +2,34 @@ package simulated_annealing;
 
 public class SimulatedAnnealing {
 
-    private SingleTour actualState;
-    private SingleTour nextState;
-    private SingleTour bestState;
+    private SingleTour actualRoot;
+    private SingleTour nextRoot;
+    private SingleTour bestRoot;
 
     public void simulate(){
         double temperature = Constants.MAX_TEMPERATURE;
 
-        actualState = new SingleTour();
-        actualState.generateTour();
-        bestState = new SingleTour(actualState.getTour());
+        actualRoot = new SingleTour();
+        actualRoot.generateTour();
+        bestRoot = new SingleTour(actualRoot.getTour());
 
-        System.out.println("Initial solution distance: " + actualState.calculateTourDistance());
+        System.out.println("Initial solution distance: " + actualRoot.calculateTourDistance());
 
         while(temperature > Constants.MIN_TEMPERATURE){
 
-            nextState = generateAnotherTour(actualState);
+            nextRoot = generateAnotherTour(actualRoot);
 
-            double currentDistance = actualState.calculateTourDistance();
-            double neighbourDistance = nextState.calculateTourDistance();
+            double currentDistance = actualRoot.calculateTourDistance();
+            double neighbourDistance = nextRoot.calculateTourDistance();
 
             if(acceptanceProbability(currentDistance, neighbourDistance, temperature) > Math.random()) {// if we get 1, next root becomes actual root
-                actualState = nextState;
+                actualRoot = nextRoot;
                 currentDistance = neighbourDistance;
             }
 
 
-            if(currentDistance < bestState.calculateTourDistance()){
-                bestState = actualState; // here we stock the best distance
+            if(currentDistance < bestRoot.calculateTourDistance()){
+                bestRoot = actualRoot; // here we stock the best distance
             }
 
             temperature *= 1 - Constants.COOLING_RATE; // here we manage the number of iterations
@@ -55,16 +55,16 @@ public class SimulatedAnnealing {
     }
 
     public SingleTour getBest(){
-        return bestState;
+        return bestRoot;
     }
 
-    private double acceptanceProbability(double currentEnergy, double neighbourEnergy, double temperature){
+    private double acceptanceProbability(double currentDistance, double nextDistance, double temperature){
 
-        if(neighbourEnergy < currentEnergy ) return 1.0; // because we look for the shortest path
+        if(nextDistance < currentDistance ) return 1.0; // because we look for the shortest path
 
         // otherwise we use the Metropolis function
-        double exp = Math.exp((currentEnergy - neighbourEnergy) / temperature);
-    //    System.out.println(" acceptance probability = ((" + currentEnergy + " - " + neighbourEnergy + ") / " + temperature + ") = "  + exp);
+        double exp = Math.exp((currentDistance - nextDistance) / temperature);
+        System.out.println(" acceptance probability = ((" + currentDistance + " - " + nextDistance + ") / " + temperature + ") = "  + exp);
 
         return exp; // (currentDistance-neighbourDistance)/temperature
     }

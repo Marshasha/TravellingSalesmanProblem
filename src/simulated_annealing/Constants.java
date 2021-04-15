@@ -6,5 +6,5 @@ public class Constants {
 
     public static final double MIN_TEMPERATURE = 1;
     public static final double MAX_TEMPERATURE = 1000;
-    public static final double COOLING_RATE = 0.03;
+    public static final double COOLING_RATE = 0.3;
 }

@@ -6,7 +6,7 @@ public class App {
 
         SimulatedAnnealing sa = new SimulatedAnnealing();
 
-        for(int i=0; i<500; i++){
+        for(int i=0; i<5; i++){
             City city = new City();
             Repository.addCity(city);
         }
